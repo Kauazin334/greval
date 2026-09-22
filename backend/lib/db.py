@@ -16,7 +16,6 @@ db = client[os.environ["DB_NAME"]]
 
 logger = logging.getLogger(__name__)
 
-# One entry per collection: every field a route filters, sorts, or dedupes on. Applied by ensure_indexes() at startup.
 INDEXES: dict[str, list[IndexModel]] = {
     'sessions': [
         IndexModel([('id', ASCENDING)], name='session_id', unique=True),
@@ -34,9 +33,10 @@ INDEXES: dict[str, list[IndexModel]] = {
 
 async def ensure_indexes() -> None:
     for collection, models in INDEXES.items():
-        for model in models:  # one at a time so a bad spec skips only itself
+        for model in models:
             try:
                 await db[collection].create_indexes([model])
-            except Exception as exc:  # never block boot on an index; the log line names what to fix
-                logger.error("ensure_indexes(%s.%s): %s", collection, model.document["name"], exc)
-                raise RuntimeError(f'Não foi possível criar o índice {collection}.{model.document["name"]}') from exc
+            except Exception as exc:
+                # Existing MongoDB indexes can have older options/names. This should not
+                # prevent the API from starting; routes can still use the existing indexes.
+                logger.warning("ensure_indexes(%s.%s): %s", collection, model.document["name"], exc)
