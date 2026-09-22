@@ -5,7 +5,6 @@ from starlette.middleware.cors import CORSMiddleware
 import logging
 from pathlib import Path
 from routers.players import router as players_router
-from lib.auth import router as auth_router
 from lib.config import get_settings, validate_runtime_settings
 
 
@@ -39,12 +38,11 @@ async def root():
 
 
 api_router.include_router(players_router)
-api_router.include_router(auth_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=list(get_settings().cors_origins),
+    allow_credentials=False,
+    allow_origins=list(get_settings().cors_origins) or ["https://kauazin334.github.io"],
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Content-Type", "X-CSRF-Token"],
 )
