@@ -1,0 +1,129 @@
+{
+  "project_title": "Banco de Dados de Jogadores - Gestão Profissional de Elenco",
+  "app_type": "dashboard",
+  "archetype": "ARCHETYPE 2: THE PERFORMANCE PRO (Elite Athleticism & Precision)",
+  "language": "pt-BR",
+  "visual_identity": {
+    "theme": "Dark Modern Athletic Operations",
+    "core_palette": {
+      "royal_blue": {
+        "primary": "#1E40AF",
+        "primary_hover": "#1D4ED8",
+        "light_blue": "#3B82F6",
+        "deep_navy": "#0B132B"
+      },
+      "yellow_gold": {
+        "accent": "#F59E0B",
+        "accent_glow": "rgba(245, 158, 11, 0.25)",
+        "gold_dark": "#D97706"
+      },
+      "pitch_green": {
+        "success": "#10B981",
+        "pitch_emerald": "#059669",
+        "grass_glow": "rgba(16, 185, 129, 0.2)"
+      },
+      "surface": {
+        "background_deep": "#070B14",
+        "card_background": "#0F172A",
+        "card_secondary": "#1E293B",
+        "border_color": "#334155",
+        "border_subtle": "#1E293B"
+      },
+      "status_colors": {
+        "ativo": "#10B981",
+        "lesionado_dm": "#EF4444",
+        "emprestado": "#F59E0B",
+        "inativo": "#64748B"
+      }
+    },
+    "team_crest": {
+      "url": "https://customer-assets-jt897jd0.emergentagent.net/job_7ae507fb-4325-4851-9878-ee133b6e7293/artifacts/v4q6p5uv_greval.jpg",
+      "description": "Escudo Oficial da Equipe com tons Azul Royal, Amarelo Ouro e Verde Gramado"
+    },
+    "reference_form_asset": {
+      "url": "https://customer-assets-jt897jd0.emergentagent.net/job_7ae507fb-4325-4851-9878-ee133b6e7293/artifacts/v3p6zy2n_banco%20de%20dado.jpg",
+      "description": "Ficha de cadastro em papel original do clube - adaptada para sistema digital de alta precisão"
+    }
+  },
+  "typography": {
+    "font_family_heading": "Outfit, Barlow Condensed, sans-serif",
+    "font_family_body": "Inter, DM Sans, sans-serif",
+    "font_family_mono": "JetBrains Mono, monospace",
+    "hierarchy": {
+      "h1_hero": "text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white",
+      "h2_section": "text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white",
+      "h3_card": "text-lg sm:text-xl font-semibold text-slate-100",
+      "body": "text-sm sm:text-base text-slate-300 leading-relaxed",
+      "badge_labels": "text-xs font-bold uppercase tracking-widest"
+    }
+  },
+  "layout_and_grid": {
+    "dashboard_grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6",
+    "roster_grid": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6",
+    "form_grid": "grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6",
+    "spacing_philosophy": "Generous spacing philosophy (p-6 to p-8 for cards, gap-6 for grids). No cramped inputs.",
+    "container_padding": "px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto"
+  },
+  "component_strategies": {
+    "header_nav": "Sticky glassmorphism header (bg-slate-900/90 backdrop-blur-xl border-b border-slate-800 z-50) with club crest, quick squad metrics, 'Novo Jogador' button, search bar, and view toggle (Cards vs Table).",
+    "stats_summary_cards": "4 high-density metric widgets: Total de Jogadores (Blue badge), Ativos no Elenco (Green badge), Departamento Médico (Red alert badge), Contratos Vencendo (Yellow warning badge).",
+    "player_card": "FIFA/EA Sports Tactical Card visual with player photo avatar, shirt number badge top-left, position badge top-right, physical stats (Altura/Peso/Pé), category (Sub-17, Profissional, etc.), and action bar (Ficha Completa, Editar, Excluir).",
+    "player_table": "Dense analytical view featuring sortable columns, player thumbnail, status pill, position tag, category, contract remaining countdown, and actions.",
+    "player_form_modal": "Multi-tab structured modal/sheet ('Cadastro Completo de Jogador'):\n1. Dados Pessoais (Nome, Apelido, Foto URL, Nasc, CPF, Pé)\n2. Campo & Categoria (Posição Principal, Secundária, Categoria, Camisa, Status)\n3. Medidas Físicas (Altura cm, Peso kg, % Gordura, Envergadura, Calçado)\n4. Saúde & Fisiologia (Tipo Sanguíneo, Alergias, DM, Restrições)\n5. Contrato & Vínculo (Início, Fim, Valor Mercado, Rescisão, Registro BID)\n6. Responsável Legal (Nome, Telefone, E-mail, Parentesco)\n7. Atributos & Scouting (Radar de Atributos 0-99: Velocidade, Chute, Passe, Drible, Defesa, Físico e Observações).",
+    "player_profile_modal": "Full dossier view (Ficha Técnica do Atleta):\n- Printable layout header with print button\n- Player photo card with rating badge\n- Interactive Radar Chart (Recharts Radar) showing athletic attributes\n- Medical history & physical evolution metrics\n- Contract status tracker bar\n- Responsible guardian contact card (for youth academy players)."
+  },
+  "image_urls": [
+    {
+      "category": "stadium_background",
+      "url": "https://images.unsplash.com/photo-1517747614396-d21a78b850e8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwzfHxzb2NjZXIlMjBzdGFkaXVtJTIwcGl0Y2glMjBiYWNrZ3JvdW5kJTIwZmxvb2RsaWdodHN8ZW58MHx8fHwxNzg5NDk0NTI1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Aerial view of floodlit soccer field pitch for hero dynamic header glow"
+    },
+    {
+      "category": "player_action_1",
+      "url": "https://images.unsplash.com/photo-1610736342165-4eeb4aef66ca?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHw0fHxzb2NjZXIlMjBwbGF5ZXIlMjBwb3J0cmFpdCUyMGF0aGxldGljJTIwYWN0aW9ufGVufDB8fHx8MTc4OTQ5NDUxNnww&ixlib=rb-4.1.0&q=85",
+      "description": "Young soccer player in yellow jersey kicking ball"
+    },
+    {
+      "category": "player_action_2",
+      "url": "https://images.unsplash.com/photo-1517466787929-bc90951d0974?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwyfHxzb2NjZXIlMjBwbGF5ZXIlMjBwb3J0cmFpdCUyMGF0aGxldGljJTIwYWN0aW9ufGVufDB8fHx8MTc4OTQ5NDUxNnww&ixlib=rb-4.1.0&q=85",
+      "description": "Athletic player in dark blue kit on field"
+    },
+    {
+      "category": "player_action_3",
+      "url": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjBwbGF5ZXIlMjBwb3J0cmFpdCUyMGF0aGxldGljJTIwYWN0aW9ufGVufDB8fHx8MTc4OTQ5NDUxNnww&ixlib=rb-4.1.0&q=85",
+      "description": "Midfielder player in motion on grass"
+    }
+  ],
+  "accessibility_and_testing": {
+    "data_testid_rules": "Mandatory data-testid on every interactive element using kebab-case role naming.",
+    "key_test_ids": [
+      "app-header",
+      "club-crest-img",
+      "button-new-player",
+      "input-search-player",
+      "select-category-filter",
+      "select-position-filter",
+      "select-status-filter",
+      "toggle-view-cards",
+      "toggle-view-table",
+      "player-card-{id}",
+      "button-view-player-{id}",
+      "button-edit-player-{id}",
+      "button-delete-player-{id}",
+      "modal-player-form",
+      "form-player-submit",
+      "modal-player-profile",
+      "button-print-profile",
+      "dialog-confirm-delete"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Load existing pre-populated realistic mock squad of at least 8-10 players covering all categories (Sub-15, Sub-17, Sub-20, Profissional) and positions (Goleiro, Zagueiro, Volante, Meia, Atacante).",
+    "Persist all changes (Create, Edit, Delete) to localStorage so refreshing the page preserves squad state.",
+    "Provide filtering by search text (name/nickname), category select, position select, and status select.",
+    "Integrate Shadcn primitives (Dialog, Tabs, Badge, Select, Button, Table, Input, Card, Checkbox, Sonner toast).",
+    "Include a radar attribute chart for player profiles using Recharts Radar Chart or custom SVG radar.",
+    "Support a PDF/Print dossier layout for the player profile so club staff can print physical scouting reports easily.",
+    "Maintain high visual distinction using Royal Blue (#1E40AF), Gold (#F59E0B), and Emerald (#10B981) matching the club crest."
+  ]
+}
