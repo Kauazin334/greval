@@ -25,7 +25,9 @@ async function parseError(res: Response): Promise<never> {
 }
 
 function normalize(row: any) {
-  return { ...(row.data ?? {}), id: row.id, created_at: row.created_at, updated_at: row.updated_at };
+  const data = row.data ?? {};
+  const documents = Array.isArray(data.documents) ? data.documents : [];
+  return { ...data, documents, id: row.id, created_at: row.created_at, updated_at: row.updated_at };
 }
 
 export function friendlyApiError(error: unknown): string {
@@ -41,7 +43,14 @@ export async function apiGet<T>(path: string): Promise<T> {
     const res = await fetch(`${PLAYERS_URL}?select=*&order=full_name.asc`, { headers: headers() });
     if (!res.ok) return parseError(res);
     const rows = await res.json();
-    return { items: rows.map(normalize), total: rows.length, limit: 100, offset: 0 } as T;
+    const objectList = await fetch(`${SUPABASE_URL}/storage/v1/object/list/greval-files`, {
+      method: "POST",
+      headers: { ...headers(true) },
+      body: JSON.stringify({ prefix: "players", limit: 1000, offset: 0, sortBy: { column: "name", order: "asc" } }),
+    }).then((response) => response.ok ? response.json() : []).catch(() => []);
+
+    const items = rows.map(normalize);
+    return { items, total: items.length, limit: 100, offset: 0 } as T;
   }
   throw new ApiError(404, { message: "Rota não suportada" });
 }
