@@ -42,7 +42,7 @@ api_router.include_router(players_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=False,
-    allow_origins=list(get_settings().cors_origins) or ["https://kauazin334.github.io"],
+    allow_origins=list(dict.fromkeys([*get_settings().cors_origins, "https://kauazin334.github.io"])),
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Content-Type", "X-CSRF-Token"],
 )
