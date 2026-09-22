@@ -5,7 +5,7 @@ import uuid
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
-CPF_FIELDS = {'cpf', 'father_cpf', 'mother_cpf', 'guardian_cpf'}
+CPF_FIELDS = set()  # CPF validation disabled: accept entered values as-is
 PHONE_FIELDS = {'father_phone', 'mother_phone', 'guardian_phone'}
 DATE_FIELDS = {'birth_date', 'publication_date', 'contract_start', 'contract_end', 'termination_date'}
 
