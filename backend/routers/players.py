@@ -7,12 +7,11 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Respon
 from fastapi.responses import FileResponse
 from pymongo import ReturnDocument
 
-from lib.auth import require_admin, require_csrf
 from lib.db import db
 from models.players import DocumentUploadResponse, DvdUploadResponse, PhotoUploadResponse, Player, PlayerCreate, PlayerPage
 
 
-router = APIRouter(prefix='/players', tags=['players'], dependencies=[Depends(require_admin)])
+router = APIRouter(prefix='/players', tags=['players'])
 UPLOAD_DIR = Path(__file__).resolve().parents[1] / 'uploads'
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 DOCUMENT_LABELS = {'rg': 'RG', 'cpf': 'CPF', 'birth_certificate': 'Certidão de nascimento'}
@@ -85,7 +84,7 @@ async def list_players(
     return PlayerPage(items=[_player_from_document(document) for document in documents], total=total, limit=limit, offset=offset)
 
 
-@router.post('', response_model=Player, dependencies=[Depends(require_csrf)])
+@router.post('', response_model=Player)
 async def create_player(input: PlayerCreate):
     player = Player(**input.model_dump())
     await db.players.insert_one(player.model_dump())
@@ -100,7 +99,7 @@ async def get_player(player_id: UUID):
     return _player_from_document(document)
 
 
-@router.put('/{player_id}', response_model=Player, dependencies=[Depends(require_csrf)])
+@router.put('/{player_id}', response_model=Player)
 async def update_player(player_id: UUID, input: PlayerCreate):
     values = input.model_dump()
     values['updated_at'] = datetime.now(timezone.utc).isoformat()
@@ -110,7 +109,7 @@ async def update_player(player_id: UUID, input: PlayerCreate):
     return _player_from_document(document)
 
 
-@router.delete('/{player_id}', status_code=204, dependencies=[Depends(require_csrf)])
+@router.delete('/{player_id}', status_code=204)
 async def delete_player(player_id: UUID):
     document = await db.players.find_one_and_delete({'id': str(player_id)})
     if not document:
@@ -122,7 +121,7 @@ async def delete_player(player_id: UUID):
     return Response(status_code=204)
 
 
-@router.post('/{player_id}/photo', response_model=PhotoUploadResponse, dependencies=[Depends(require_csrf)])
+@router.post('/{player_id}/photo', response_model=PhotoUploadResponse)
 async def upload_player_photo(player_id: UUID, file: UploadFile = File(...)):
     contents = await file.read(MAX_PHOTO_BYTES + 1)
     extension = _image_extension(contents)
@@ -159,7 +158,7 @@ async def download_player_photo(player_id: UUID):
     return FileResponse(path, media_type=media_type, headers={'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff'})
 
 
-@router.post('/{player_id}/dvd', response_model=DvdUploadResponse, dependencies=[Depends(require_csrf)])
+@router.post('/{player_id}/dvd', response_model=DvdUploadResponse)
 async def upload_player_dvd(player_id: UUID, file: UploadFile = File(...)):
     if not await db.players.find_one({'id': str(player_id)}, {'_id': 1}):
         raise HTTPException(status_code=404, detail='Jogador não encontrado')
@@ -218,7 +217,7 @@ async def download_player_dvd(player_id: UUID):
     return FileResponse(path, media_type=media_type, headers={'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff'})
 
 
-@router.post('/{player_id}/documents', response_model=DocumentUploadResponse, dependencies=[Depends(require_csrf)])
+@router.post('/{player_id}/documents', response_model=DocumentUploadResponse)
 async def upload_player_document(player_id: UUID, document_type: str = Form(...), file: UploadFile = File(...)):
     if document_type not in DOCUMENT_LABELS:
         raise HTTPException(status_code=400, detail='Tipo de documento inválido')
