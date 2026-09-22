@@ -85,8 +85,71 @@ export async function apiDelete<T>(path: string): Promise<T> {
 
 export const apiPatch = apiPut;
 
-// Arquivos serão migrados para Supabase Storage numa etapa separada.
-// O cadastro principal nunca deve falhar por causa de um anexo.
-export async function apiUpload<T>(_path: string, _formData: FormData): Promise<T> {
-  throw new ApiError(501, { message: "Upload temporariamente indisponível durante a migração." });
+const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/greval-files`;
+const PUBLIC_STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/greval-files`;
+
+async function getPlayerRow(id: string): Promise<any> {
+  const res = await fetch(`${PLAYERS_URL}?id=eq.${encodeURIComponent(id)}&select=*`, { headers: headers() });
+  if (!res.ok) return parseError(res);
+  const rows = await res.json();
+  if (!rows[0]) throw new ApiError(404, { message: "Jogador não encontrado." });
+  return rows[0];
+}
+
+async function updatePlayerData(id: string, data: any) {
+  const res = await fetch(`${PLAYERS_URL}?id=eq.${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: { ...headers(true), Prefer: "return=minimal" },
+    body: JSON.stringify({ data, updated_at: new Date().toISOString() }),
+  });
+  if (!res.ok) return parseError(res);
+}
+
+export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  const photoMatch = path.match(/^\/players\/([^/]+)\/photo$/);
+  const documentMatch = path.match(/^\/players\/([^/]+)\/documents$/);
+  const playerId = photoMatch?.[1] ?? documentMatch?.[1];
+  const file = formData.get("file");
+
+  if (!playerId || !(file instanceof File)) {
+    throw new ApiError(400, { message: "Arquivo inválido." });
+  }
+
+  const isPhoto = Boolean(photoMatch);
+  const documentType = String(formData.get("document_type") ?? "");
+  const extension = file.name.split(".").pop()?.toLowerCase() || (isPhoto ? "jpg" : "pdf");
+  const objectPath = isPhoto
+    ? `players/${playerId}/photo.${extension}`
+    : `players/${playerId}/documents/${documentType}.${extension}`;
+
+  const upload = await fetch(`${STORAGE_URL}/${objectPath}`, {
+    method: "POST",
+    headers: { ...headers(), "Content-Type": file.type || "application/octet-stream", "x-upsert": "true" },
+    body: file,
+  });
+  if (!upload.ok) return parseError(upload);
+
+  const publicUrl = `${PUBLIC_STORAGE_URL}/${objectPath}`;
+  const row = await getPlayerRow(playerId);
+  const data = { ...(row.data ?? {}) };
+
+  if (isPhoto) {
+    data.photo_url = publicUrl;
+    await updatePlayerData(playerId, data);
+    return { photo_url: publicUrl, filename: file.name, size_bytes: file.size } as T;
+  }
+
+  const labels: Record<string, string> = { rg: "RG", cpf: "CPF", birth_certificate: "Certidão de nascimento" };
+  const document = {
+    document_type: documentType,
+    label: labels[documentType] ?? documentType,
+    filename: file.name,
+    size_bytes: file.size,
+    uploaded_at: new Date().toISOString(),
+    url: publicUrl,
+  };
+  const existing = Array.isArray(data.documents) ? data.documents : [];
+  data.documents = [...existing.filter((item: any) => item.document_type !== documentType), document];
+  await updatePlayerData(playerId, data);
+  return document as T;
 }
